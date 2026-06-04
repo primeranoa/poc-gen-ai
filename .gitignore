@@ -1,0 +1,13 @@
+# Data files (too large for git)
+*.csv
+*.CSV
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+.vscode/
+*.swp
