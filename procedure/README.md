@@ -6,11 +6,72 @@ Trasformare i file CSV prodotti dalla data-integration **BMED** in file compatib
 
 ---
 
+## Flussi Attivi in PROMPFT (analisi variabili d'ambiente)
+
+### Configurazione da `ppebatch.ini`
+
+| Variabile | Valore | Stato |
+|-----------|--------|-------|
+| `BATCH_ENABLE_TASK_ANASTRUMCOEFFICIENTI` | false | ❌ Disabilitato |
+| `BATCH_ENABLE_TASK_CARICAMENTOCACHE_SQLDB` | false | ❌ Disabilitato |
+| `BATCH_ENABLE_TASK_ESG_PARAMETERS_EXPORT` | true | ✅ Attivo |
+| `BATCH_ENABLE_TASK_IMPORT_CANALE_DISTRIBUZIONE` | false | ❌ Disabilitato |
+| `BATCH_ENABLE_TASK_EXPORT_PARAMETRI_SP` | true | ✅ Attivo |
+| `BATCH_ENABLE_TASK_EXPORT_CAT` | true | ✅ Attivo |
+| `BATCH_ENABLE_TASK_IMPORT_PRAPROXY` | true | ✅ Attivo |
+| `BATCH_ENABLE_TASK_INFORISCHIO` | true | ✅ Attivo |
+| `BATCH_ENABLE_TASK_MAPPATURAGEOGRAFICA` | false | ❌ Disabilitato |
+| `BATCH_ENABLE_TASK_MAPPATURASETTORIALE` | false | ❌ Disabilitato |
+| `BATCH_ENABLE_TASK_SCENAINDICIGREZZE` | false | ❌ Disabilitato |
+
+### Variabili non in ppebatch.ini (abilitate per default dal container Docker)
+
+| Variabile | Valore implicito | Stato |
+|-----------|-----------------|-------|
+| `BATCH_ENABLE_TASK_MAPPATURA` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_MAPPATURAVALUTARIA` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_SCENAINDICI` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_ESG` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_IMPORT_CATALOGOCOMMERCIALE` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_ALLINEAMENTO_GIORNALIERO` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_CARICAMENTOCACHE_REDIS` | true (default) | ✅ Attivo |
+| `BATCH_ENABLE_TASK_CARICAMENTOCACHE_DYNAMODB` | true (default) | ✅ Attivo |
+
+### File CSV effettivamente richiesti nella cartella `input/` (13 attivi, 5 disabilitati)
+
+| # | File | Flusso | Stato | Prodotto da BMED? |
+|---|------|--------|-------|-------------------|
+| 1 | `PFPANATIT.csv` | Anagrafica titoli | ✅ Sempre attivo | ✅ Con script conversione |
+| 2 | `TM_Actual.csv` | Catalogo TM | ✅ Sempre attivo | ✅ Diretto |
+| 3 | `TM_Appoggio.csv` | Setup TM | ✅ Sempre attivo | ✅ Diretto |
+| 4 | `TM_Fattispecie.csv` | Fattispecie TM | ✅ Sempre attivo | ✅ Rinomina file |
+| 5 | `costiStandardProdotto.csv` | Costi prodotto | ✅ Sempre attivo | ✅ Diretto |
+| 6 | `costiStandardFattispecie.csv` | Costi fattispecie | ✅ Sempre attivo | ✅ Diretto |
+| 7 | `eccezioni_switch.txt` | Eccezioni switch | ✅ Sempre attivo | ❌ Non prodotto |
+| 8 | `PAAMappatura.txt` | Mappatura asset class | ✅ Attivo (default) | ❌ Non prodotto |
+| 9 | `PAAMappaturaValutaria.txt` | Mappatura valutaria | ✅ Attivo (default) | ❌ Non prodotto |
+| 10 | `PAAScenaIndici.txt` | Scenari indici | ✅ Attivo (default) | ❌ Non prodotto |
+| 11 | `ESGAttributes.csv` | Attributi ESG | ✅ Attivo (default) | ✅ Diretto |
+| 12 | `catalogoCommerciale.csv` | Catalogo commerciale | ✅ Attivo (default) | ❌ Non prodotto |
+| 13 | `govPraProxy.txt` | PRA Proxy | ✅ Attivo (ini=true) | ❌ Non prodotto |
+| 14 | `PAAMappaturaGeografica.txt` | Mappatura geografica | ❌ Disabilitato | — |
+| 15 | `PAAMappaturaSettoriale.txt` | Mappatura settoriale | ❌ Disabilitato | — |
+| 16 | `PAAScenaIndiciGrezze.txt` | Scenari grezzi | ❌ Disabilitato | — |
+| 17 | `anaStrumCoefficienti.csv` | Coefficienti strumento | ❌ Disabilitato | — |
+| 18 | `catalogoCanaliProdotto.csv` | Canali distribuzione | ❌ Disabilitato | — |
+
+### Copertura BMED
+
+- **7 flussi su 13** attivi sono coperti da BMED (direttamente o con conversione)
+- **6 flussi** attivi non sono prodotti da BMED e dovranno essere forniti separatamente o disabilitati nel POC
+
+---
+
 ## Analisi Comparativa Tracciati
 
-### Riepilogo Compatibilità
+### Riepilogo Compatibilita
 
-| # | Tracciato | File BMED | File PROMPFT | Compatibilità | Azione |
+| # | Tracciato | File BMED | File PROMPFT | Compatibilita | Azione |
 |---|-----------|-----------|--------------|---------------|--------|
 | 1 | ANAGRTIT | `ANATIT.csv` | `PFPANATIT.csv` | ⚠️ Trasformazione | Script Python |
 | 2 | CATALOGOTM | `TM_Actual.csv` | `TM_Actual.csv` | ✅ Compatibile | Nessuna |
@@ -33,7 +94,7 @@ Trasformare i file CSV prodotti dalla data-integration **BMED** in file compatib
 | N. colonne | 165 | 177 |
 | strongFieldTypeCheck | Disabilitato | **TRUE** |
 | Separatore | `;` | `;` |
-| Header | Sì | Sì |
+| Header | Si | Si |
 
 ### Rinomina colonne (16 campi)
 
@@ -103,20 +164,18 @@ Trasformare i file CSV prodotti dalla data-integration **BMED** in file compatib
 
 | Campo | BMED | PROMPFT | Impatto |
 |-------|------|---------|---------|
-| `C_TIPO_STRUMENTO_2` | VARCHAR(50) | VARCHAR(100) | Nessuno (PROMPFT accetta di più) |
+| `C_TIPO_STRUMENTO_2` | VARCHAR(50) | VARCHAR(100) | Nessuno (PROMPFT accetta di piu) |
 | `Z_SOTTO_TIPO_BANCA` | VARCHAR(50) | VARCHAR(200) | Nessuno |
 | `TIPO_PAC` | VARCHAR(5) | VARCHAR(50) | Nessuno |
 | `IS_ESG_APPLICABLE` | INT obbligatorio | INT opzionale | Nessuno |
 
 ### Campo C_PIR
 
-Il campo `C_PIR` esiste sulla tabella DB `tmp_anagrtit` di PROMPFT ma **non** è nel tracciato XML. Viene usato nella query di UPDATE (batchUpdate.xml). Poiché non è nel tracciato, non viene popolato dall'importazione CSV e resta **NULL**. Comportamento atteso, nessuna azione necessaria.
+Il campo `C_PIR` esiste sulla tabella DB `tmp_anagrtit` di PROMPFT ma **non** e nel tracciato XML. Viene usato nella query di UPDATE (batchUpdate.xml). Poiche non e nel tracciato, non viene popolato dall'importazione CSV e resta **NULL**. Comportamento atteso, nessuna azione necessaria.
 
 ---
 
 ## 2. CATALOGOTM — Catalogo Target Market
-
-### Struttura (identica)
 
 | # | Campo | Tipo | BMED obbl. | PROMPFT obbl. |
 |---|-------|------|-----------|--------------|
@@ -127,15 +186,12 @@ Il campo `C_PIR` esiste sulla tabella DB `tmp_anagrtit` di PROMPFT ma **non** è
 | 5 | DOMINIO | INT | ✅ | ✅ |
 | 6 | ESITO | VARCHAR(10) | ✅ | ✅ |
 
-**Unica differenza:** MODSOMM è obbligatorio in BMED, opzionale in PROMPFT.
-
-**Azione:** Nessuna. Il file `TM_Actual.csv` di BMED è direttamente importabile.
+**Unica differenza:** MODSOMM e obbligatorio in BMED, opzionale in PROMPFT.
+**Azione:** Nessuna. Il file `TM_Actual.csv` di BMED e direttamente importabile.
 
 ---
 
 ## 3. SETUPTM — Setup Target Market
-
-### Struttura (identica)
 
 | # | Campo | Tipo | Obbl. |
 |---|-------|------|-------|
@@ -153,8 +209,6 @@ Il campo `C_PIR` esiste sulla tabella DB `tmp_anagrtit` di PROMPFT ma **non** è
 
 ## 4. FATTISPECIETM — Fattispecie Target Market
 
-### Struttura (identica)
-
 | # | Campo | Tipo | Obbl. |
 |---|-------|------|-------|
 | 1 | CODICEBANCA | VARCHAR(50) | ✅ |
@@ -167,7 +221,7 @@ Il campo `C_PIR` esiste sulla tabella DB `tmp_anagrtit` di PROMPFT ma **non** è
 - BMED: `CATALOGOTMFATTISPECIE.csv`
 - PROMPFT: `TM_Fattispecie.csv`
 
-**Azione:** Rinominare il file. Comando:
+**Azione:** Rinominare il file:
 ```bash
 cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 ```
@@ -175,8 +229,6 @@ cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 ---
 
 ## 5. ESG — Attributi ESG
-
-### Struttura (identica)
 
 | # | Campo | Tipo | Obbl. |
 |---|-------|------|-------|
@@ -197,8 +249,6 @@ cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 
 ## 6. COSTI_STD_PRODOTTO — Costi Standard Prodotto
 
-### Struttura (stessi campi)
-
 | # | Campo | Tipo | BMED obbl. | PROMPFT obbl. |
 |---|-------|------|-----------|--------------|
 | 1 | CODICEBANCA | VARCHAR(50) | ✅ | ✅ |
@@ -218,15 +268,11 @@ cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 | 15 | ANNI_DA | INT | ✅ | ✅ |
 | 16 | ANNI_A | INT | ✅ | ✅ |
 
-**Differenze obbligatorietà:** invertite ma irrilevanti (BMED fornisce sempre tutti i campi).
-
-**Azione:** Nessuna.
+**Azione:** Nessuna. BMED fornisce sempre tutti i campi.
 
 ---
 
 ## 7. COSTI_STD_FATTISPECIE — Costi Standard Fattispecie
-
-### Struttura (stessi campi)
 
 | # | Campo | Tipo BMED | Tipo PROMPFT | BMED obbl. | PROMPFT obbl. |
 |---|-------|-----------|--------------|-----------|--------------|
@@ -246,38 +292,14 @@ cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 | 14 | ANNI_A | INT | INT | ✅ | ✅ |
 
 **Differenza tipo IS_ATTIVO:** BMED manda VARCHAR ("0"/"1"), PROMPFT attende INT. PostgreSQL gestisce il cast implicito senza errori.
-
-**Azione:** Nessuna (cast automatico).
+**Azione:** Nessuna.
 
 ---
 
 ## 8. SCORE_PICKING — Solo BMED
 
 Tracciato esclusivo BMED con 7 campi (CODICE_TITOLO, SCORE_HFB, CODE_SILOS, DESC_SILOS, MICRO_AC, MACRO_AC, DATARIFERIMENTO). Non esiste equivalente in PROMPFT.
-
 **Azione:** Non applicabile. Ignorare.
-
----
-
-## Flussi solo PROMPFT (non prodotti da BMED)
-
-Questi tracciati esistono in PROMPFT ma BMED non li produce. Se necessari per il POC, dovranno essere forniti separatamente:
-
-| File | Descrizione | Condizione attivazione |
-|------|-------------|----------------------|
-| `PAAMappatura.txt` | Mappatura asset class | BATCH_ENABLE_TASK_MAPPATURA |
-| `PAAMappaturaValutaria.txt` | Mappatura valutaria | BATCH_ENABLE_TASK_MAPPATURAVALUTARIA |
-| `PAAMappaturaGeografica.txt` | Mappatura geografica | BATCH_ENABLE_TASK_MAPPATURAGEOGRAFICA |
-| `PAAMappaturaSettoriale.txt` | Mappatura settoriale | BATCH_ENABLE_TASK_MAPPATURASETTORIALE |
-| `PAAScenaIndici.txt` | Scenari indici | BATCH_ENABLE_TASK_SCENAINDICI |
-| `PAAScenaIndiciGrezze.txt` | Scenari indici grezzi | BATCH_ENABLE_TASK_SCENAINDICIGREZZE |
-| `eccezioni_switch.txt` | Eccezioni switch | Sempre |
-| `catalogoCommerciale.csv` | Catalogo commerciale | BATCH_ENABLE_TASK_IMPORT_CATALOGOCOMMERCIALE |
-| `govPraProxy.txt` | PRA Proxy | BATCH_ENABLE_TASK_IMPORT_PRAPROXY |
-| `anaStrumCoefficienti.csv` | Coefficienti strumento | BATCH_ENABLE_TASK_ANASTRUMCOEFFICIENTI |
-| `catalogoCanaliProdotto.csv` | Canali distribuzione | BATCH_ENABLE_TASK_IMPORT_CANALE_DISTRIBUZIONE |
-
-Nota: questi flussi sono tutti opzionali (disabilitabili via variabile d'ambiente). Per un POC minimo, non sono necessari.
 
 ---
 
@@ -286,38 +308,47 @@ Nota: questi flussi sono tutti opzionali (disabilitabili via variabile d'ambient
 ### Prerequisiti
 
 - Python 3.6+
-- File `ANATIT.csv` da BMED (encoding UTF-8, separatore `;`)
+- File CSV da BMED (encoding UTF-8, separatore `;`)
 
-### Esecuzione
+### Esecuzione completa
 
 ```bash
-# 1. Converti anagrafica titoli
+# 1. Converti anagrafica titoli (unica trasformazione reale)
 python procedure/converti_anatit_bmed_to_prompft.py ANATIT.csv PFPANATIT.csv
 
-# 2. Rinomina fattispecie TM (se presente)
+# 2. Rinomina fattispecie TM
 cp CATALOGOTMFATTISPECIE.csv TM_Fattispecie.csv
 
-# 3. Gli altri file sono direttamente compatibili:
-#    - TM_Actual.csv         → usare così com'è
-#    - TM_Appoggio.csv       → usare così com'è
-#    - ESGAttributes.csv     → usare così com'è
-#    - costiStandardProdotto.csv    → usare così com'è
-#    - costiStandardFattispecie.csv → usare così com'è
+# 3. Gli altri file sono direttamente compatibili (copiare nella cartella input):
+#    - TM_Actual.csv              → usare cosi com'e
+#    - TM_Appoggio.csv            → usare cosi com'e
+#    - ESGAttributes.csv          → usare cosi com'e
+#    - costiStandardProdotto.csv  → usare cosi com'e
+#    - costiStandardFattispecie.csv → usare cosi com'e
+
+# 4. Flussi attivi in PROMPFT ma non prodotti da BMED (da fornire separatamente):
+#    - PAAMappatura.txt
+#    - PAAMappaturaValutaria.txt
+#    - PAAScenaIndici.txt
+#    - catalogoCommerciale.csv
+#    - govPraProxy.txt
+#    - eccezioni_switch.txt
 ```
 
 ### Output atteso
 
 Dopo la conversione, i file risultanti sono importabili dalla data-integration PROMPFT (batchImportazione.xml → batchControlliPreliminari.xml → batchUpdate.xml) senza errori.
 
-Il campo `C_PIR` resterà NULL nel DB — comportamento atteso.
+Il campo `C_PIR` restera NULL nel DB — comportamento atteso.
 
 ---
 
 ## Verifiche eseguite
 
-La compatibilità è stata verificata analizzando:
+La compatibilita e stata verificata analizzando:
 1. **batchImportazione.xml** — importazione multithread legge il CSV tramite il tracciato XML
 2. **batchControlliPreliminari.xml** — controllo duplicati e FK su `tmp_anagrtit`
 3. **batchUpdate.xml** — INSERT INTO PPECATALOGO con SELECT da `tmp_anagrtit`
 4. **batchCheckFlussiInput.xml** — verifica esistenza file `PFPANATIT.csv`
 5. **Schema DB** (`tmp_anagrtit` su PostgreSQL BPM svil) — tutte le colonne referenziate nelle query sono presenti o nullable
+6. **ppebatch.ini** — variabili BATCH_ENABLE_TASK per determinare flussi attivi/disattivi
