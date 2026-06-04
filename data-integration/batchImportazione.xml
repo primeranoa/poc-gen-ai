@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>FASE IMPORTAZIONE FLUSSI DI INPUT</jobName>
+	<isThread>false</isThread>
+
+	<task>
+		<id>0</id>
+		<enabled>%BATCH_ENABLE_TASK_MAPPATURAVALUTARIA%</enabled>
+		<name>Importazione Flusso Mappatura Valutaria</name>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_PAAMAPPATURAVALUTARIA]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/mappaturavalutaria.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<enabled>%BATCH_ENABLE_TASK_SCENAINDICI%</enabled>
+		<id>1</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_PAASCENAINDICI]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/scenaindici.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<id>3</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_ANAGRTIT]]></sql>
+		</sqlProcess>
+	</task>
+
+	<task>
+		<id>5</id>
+		<name>Importazione Multithread di Mappatura, Anagrtit e Catalogotm</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.model.ImportMultiThreadJob</className>
+			<arg>%PATH_FASI_XML%/tracciati/mappatura.xml</arg>
+			<arg>%PATH_FASI_XML%/tracciati/anagrtit.xml</arg>
+			<arg>%PATH_FASI_XML%/tracciati/catalogotm.xml</arg>
+		</javaProcess>
+	</task>
+
+	<task>
+		<id>6</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_SETUPTM]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/setuptm.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<id>7</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_FATTISPECIETM]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/fattispecietm.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<id>8</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_COSTI_STD_PRODOTTO]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/costi_std_prodotto.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<id>9</id>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_COSTI_STD_FATTISPECIE]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/costi_std_fattispecie.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+	<task>
+		<id>16</id>
+		<enabled>%BATCH_ENABLE_TASK_ESG%</enabled>
+		<sqlProcess>
+			<transaction>true</transaction>
+			<sql><![CDATA[DELETE FROM %DBSchema%SCARTI_TMP_PPEESG_INSTR_ATTR]]></sql>
+		</sqlProcess>
+		<importProcess>
+			<xmlTracciatoPath>%PATH_FASI_XML%/tracciati/esg.xml</xmlTracciatoPath>
+		</importProcess>
+	</task>
+
+</job>
