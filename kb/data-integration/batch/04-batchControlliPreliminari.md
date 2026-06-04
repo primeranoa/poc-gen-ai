@@ -11,14 +11,14 @@ Valida i dati importati nelle tabelle TMP_*, scartando record duplicati o con da
 ## Controlli per flusso
 
 | # | Tabella TMP | Chiave Controllo | Controlli |
-|---|-------------|------------------|-----------|
+|---|-------------|------------------|----------|
 | 0 | TMP_ANAGRTIT | CODICE_TITOLO | Duplicati |
 | 1 | TMP_PPEESG_INSTR_ATTRIBUTES | INSTRUMENT_CODE + PILLAR_KEY | Duplicati, score mancante |
 | 2 | TMP_CATALOGOTM | CODICEBANCA + MODSOMM + CODICERISCHIO + TIPOCONTROLLO + DOMINIO | Duplicati, valori TM incompleti |
 | 3 | TMP_SETUPTM | MODSOMM + CODICEBANCA + TIPOCONTROLLO + ESITO + PRODUCT_TYPE | Duplicati |
 | 4 | TMP_FATTISPECIETM | CODICEBANCA + RAGGRUPPAMENTO + TIPOCONTROLLO + DOMINIO | Duplicati, controllo TM non valido |
-| 5 | TMP_COSTI_STD_PRODOTTO | CODICEINTERNO + CODICECOSTO + SCAGLIONEDA + SCAGLIONEA + ANNI_DA + ANNI_A | Duplicati |
-| 6 | TMP_COSTI_STD_FATTISPECIE | CODICEBANCA + CODICERAGGRUPPAMENTO + CODICECOSTO + scaglioni | Duplicati |
+| 5 | TMP_COSTI_STD_PRODOTTO | CODICEINTERNO + CODICECOSTO + SCAGLIONEDA + SCAGLIONEA | Duplicati |
+| 6 | TMP_COSTI_STD_FATTISPECIE | CODICEBANCA + CODICERAGGRUPPAMENTO + CODICECOSTO | Duplicati |
 | 7 | TMP_PAAMAPPATURA | CODICETITOLO + CODICE | Duplicati |
 | 8 | TMP_PAAMAPPATURAVALUTARIA | CODICETITOLO + CODICE | Duplicati |
 | 9 | TMP_PAAMAPPATURAGEOGRAFICA | CODICETITOLO + CODICEITEM | Duplicati |
@@ -31,11 +31,6 @@ Valida i dati importati nelle tabelle TMP_*, scartando record duplicati o con da
 
 ## Logica comune
 
-1. `INSERT INTO SCARTI_TMP_*` dei record problematici con MOTIVO_SCARTO e RIPROPONIBILE='N'
+Per ogni controllo:
+1. `INSERT INTO SCARTI_TMP_*` dei record problematici con MOTIVO_SCARTO
 2. `DELETE FROM TMP_*` dei record scartati
-
-## Motivi di scarto tipici
-- CHIAVE PRIMARIA ... DUPLICATA
-- STRUMENTO ESCLUSO IN QUANTO SCORE NON PRESENTE
-- ESCLUSO STRUMENTO PER CONTROLLO TM NON VALIDO
-- VALOREPERC E VALOREEURO SIMULTANEAMENTE NULL

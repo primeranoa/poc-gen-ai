@@ -8,14 +8,6 @@
 
 Calcola gli indicatori di rischio per tutti gli strumenti e aggiorna il catalogo.
 
-## Task
-
-| Step | Tipo | Dettaglio |
-|------|------|----------|
-| 1 | SQL | `DELETE FROM PPEINFORISCHIO` |
-| 2 | Java | Calcola indicatori |
-| 3 | SQL | `MERGE INTO PPECATALOGO USING PPEINFORISCHIO` |
-
 ## Mapping indicatori
 
 | Campo PPEINFORISCHIO | Campo PPECATALOGO | Indicatore |

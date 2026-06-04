@@ -9,30 +9,22 @@ Esporta i dati dal database verso file CSV/XML/JSON per l'Advisory Engine runtim
 
 ## File esportati
 
-| # | File output | Formato | Tabelle fonte |
-|---|-------------|---------|---------------|
-| 1 | catalogoTitoli.csv | CSV | PPECATALOGO_EFFETTIVO_VIEW |
-| 2 | soglieConcentrazioneComplessi.csv | CSV | PPECONCENTRAZIONE_CLASSESP |
-| 3 | soglieConcentrazione.csv | CSV | PPECONCENTRAZIONEPO |
-| 4 | soglieFrequenza.csv | CSV | PPESOGLIAFREQUENZAMODELLO |
-| 5 | parametriSuitability.xml | XML | (Java) |
-| 6 | parametriPPE.xml | XML | (Java) |
-| 7 | ESGParameters.xml | XML | (Java) |
-| 8 | scoreESG.json | JSON | (Java) |
-| 9 | PAACatalogoTM.txt | CSV | PPECATALOGOTM + PPECATALOGO |
-| 10 | PAACatalogoFattispecieTM.txt | CSV | PPEFATTISPECIETM |
-| 11 | PAAParametriProdotti.txt | CSV | PPECATALOGO_EFFETTIVO_VIEW |
-| 12 | costiStandardProdotto.csv | CSV | PPECOSTI |
-| 13 | costiStandardFattispecie.csv | CSV | PPECOSTIFATTISPECIE |
-| 14 | PAAMappatura.txt | CSV | PAAMAPPATURA |
-| 15 | PAAMappaturaValutaria.txt | CSV | PAAMAPPATURAVALUTARIA |
-| 16 | PAAScenaIndici.txt | CSV | PAASCENAINDICI |
-| 17 | eccezioniSwitch.csv | CSV | PPEECCEZIONISWITCH |
-
-## Classi Java utilizzate
-
-| Classe | File generato |
-|--------|---------------|
-| `it.prometeia.ppegov.batch.EsportazioneParametri` | parametriSuitability.xml, parametriPPE.xml |
-| `it.prometeia.ppegov.batch.EsportazioneParametriESG` | ESGParameters.xml |
-| `it.prometeia.ppegov.batch.EsportazioneScoreESG` | scoreESG.json |
+| # | File output | Formato | Destinazione |
+|---|-------------|---------|-------------|
+| 1 | catalogoTitoli.csv | CSV | ini/ |
+| 2 | soglieConcentrazioneComplessi.csv | CSV | ini/ |
+| 3 | soglieConcentrazione.csv | CSV | ini/ |
+| 4 | soglieFrequenza.csv | CSV | ini/ |
+| 5 | parametriSuitability.xml | XML | ini/ |
+| 6 | parametriPPE.xml | XML | ini/ |
+| 7 | ESGParameters.xml | XML | ini/ |
+| 8 | scoreESG.json | JSON | ini/ |
+| 9 | PAACatalogoTM.txt | CSV | importFile/ |
+| 10 | PAACatalogoFattispecieTM.txt | CSV | importFile/ |
+| 11 | PAAParametriProdotti.txt | CSV | importFile/ |
+| 12 | costiStandardProdotto.csv | CSV | ini/ |
+| 13 | costiStandardFattispecie.csv | CSV | ini/ |
+| 14 | PAAMappatura.txt | CSV | importFile/ |
+| 15 | PAAMappaturaValutaria.txt | CSV | importFile/ |
+| 16 | PAAScenaIndici.txt | CSV | importFile/ |
+| 17 | eccezioniSwitch.csv | CSV | ini/ |

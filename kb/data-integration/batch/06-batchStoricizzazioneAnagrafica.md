@@ -22,4 +22,4 @@ Crea snapshot storici delle configurazioni anagrafica. Pattern SCD Type 2 (DATAI
 ## Pattern
 1. UPDATE BKP SET DATAFINE dove modificato
 2. INSERT nuovo record con DATAINIZIO = datamodifica
-3. UPDATE DATAFINE per record rimossi
+3. Chiudi record rimossi
