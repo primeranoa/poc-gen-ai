@@ -1,0 +1,25 @@
+# 06 — batchStoricizzazioneAnagrafica.xml
+
+**Job Name:** `STORICIZZAZIONE ANAGRAFICA`  
+**Tipo:** SQL  
+**Transazionale:** Si
+
+## Scopo
+
+Crea snapshot storici delle configurazioni anagrafica. Pattern SCD Type 2 (DATAINIZIO/DATAFINE).
+
+## Entita storicizzate
+
+| # | Tabella origine | Tabella BKP | Chiave |
+|---|-----------------|-------------|--------|
+| 0 | PPECATALOGOMANUALE | PPECATALOGOMANUALE_BKP | AMBITO_APPLICATIVO + CODICE_ISIN |
+| 1 | PAAMAPPATURA | PAAMAPPATURA_BKP | CODICETITOLO + CODICE |
+| 2 | PAAMAPPATURAVALUTARIA | PAAMAPPATURAVALUTARIA_BKP | CODICETITOLO + CODICE |
+| 3 | PAAMAPPATURAGEOGRAFICA | PAAMAPPATURAGEOGRAFICA_BKP | CODICETITOLO + CODICEITEM |
+| 4 | PAAMAPPATURASETTORIALE | PAAMAPPATURASETTORIALE_BKP | CODICETITOLO + CODICEITEM |
+| 5 | PPEECCEZIONISWITCH | PPEECCEZIONISWITCH_BKP | CODICE_SICAV + FAMIGLIA_IN + FAMIGLIA_OUT |
+
+## Pattern
+1. UPDATE BKP SET DATAFINE dove modificato
+2. INSERT nuovo record con DATAINIZIO = datamodifica
+3. UPDATE DATAFINE per record rimossi
